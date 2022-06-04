@@ -1,38 +1,53 @@
 import React, { Component, useState } from 'react'
-import { Card, CardContent } from '@mui/material'
+import { Card, CardContent, Button } from '@mui/material'
 import '../PrintPage/printform.css'
 import PrintInfo from './PrintInfo';
 import Address from '../personalinfo/Address';
 import Payment from '../personalinfo/Payment';
 import Successful from '../personalinfo/successful';
+import { clear } from '@testing-library/user-event/dist/clear';
 
 
 function PrintForm() {
     const [page, setPage] = useState(0);
     const [fromData, setFormData] = useState({
-        tests:"",
-        test2: "",
-        file:"",
-        description:"",
-        fistname: "",
-        lastname: "",
-        address:"",
-        date:"",
-        time:"",
-        files:""
+        tests: '',
+        test: '',
+        files1: '',
+        description: '',
+        firstname: '',
+        lastname: '',
+        address: '',
+        date: '',
+        time: '',
+        files: '',
     });
-
     const FormTitles = ["Print Form", "Address", "Payment"];
 
-    const PageDisplay = () =>{
-        if (page === 0){
-            return <PrintInfo fromData={fromData} setFormData={setFormData}/>
-        }else if(page === 1){
-            return <Address/>
-        }else if(page === 2){
-            return <Payment/>
+    const PageDisplay = () => {
+        if (page === 0) {
+            return <PrintInfo fromData={fromData} setFormData={setFormData} />
+        } else if (page === 1) {
+            return <Address fromData={fromData} setFormData={setFormData} />
+        } else if (page === 2) {
+            return <Payment fromData={fromData} setFormData={setFormData} />
         }
-        return <Successful/>
+        return <Successful />
+    }
+
+    const clearData = () => {
+        setFormData({
+            tests: '',
+            test: '',
+            files1: '',
+            description: '',
+            firstname: '',
+            lastname: '',
+            address: '',
+            date: '',
+            time: '',
+            files: '',
+        })
     }
 
     return (
@@ -41,24 +56,32 @@ function PrintForm() {
                 <CardContent>
                     <div className="form">
                         <div className="progressbar">
-                            <div style={{width:page === 0? "33.3%" :page === 1 ? "66.6%":page === 2? "100%":"100%"}}></div>
+                            <div style={{ width: page === 0 ? "33.3%" : page === 1 ? "66.6%" : page === 2 ? "100%" : "100%" }}></div>
                         </div>
                         <div className="form-container">
                             <div className="header">
-                                <h1>{FormTitles[page]}</h1>
+                                <h3>{FormTitles[page]}</h3>
                             </div>
                             <div className="body">
                                 {PageDisplay()}
                             </div>
                             <div className="footer" >
-                                <button
-                                disabled={page===0}
-                                onClick={() => {setPage((currpage) => currpage-1)}}
-                                    >Prev</button>
-                                <button 
-                                disabled={page===FormTitles.length - 1}
-                                onClick={() => {setPage((currpage) => currpage+1)}}>
-                                    Next</button>
+                                <Button variant="contained" color='error'
+                                    disabled={page === 0}
+                                    onClick={() => { setPage((currpage) => currpage - 1) }}
+                                >Prev</Button>
+                                <Button variant="contained" color="success"
+                                    onClick={() => {
+                                        if (page === FormTitles.length - 1) {
+                                            alert("Form Submit")
+                                            console.log(fromData)
+                                            clearData()
+                                        } else
+                                            setPage((currpage) => currpage + 1)
+                                    }}>
+                                    {page === FormTitles.length - 1 ? "Submit" : "Next"}
+                                </Button>
+
                             </div>
                         </div>
                     </div>
