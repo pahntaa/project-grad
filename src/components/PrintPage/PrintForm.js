@@ -1,15 +1,18 @@
-import React, { Component, useState } from 'react'
+import React, { Component, useEffect, useState } from 'react'
 import { Card, CardContent, Button } from '@mui/material'
 import '../PrintPage/printform.css'
 import PrintInfo from './PrintInfo';
 import Address from '../personalinfo/Address';
 import Payment from '../personalinfo/Payment';
 import Successful from '../personalinfo/successful';
-import { clear } from '@testing-library/user-event/dist/clear';
+import { db } from '../../firebase-config';
+import { collection, getDocs, addDoc } from 'firebase/firestore'
 
 
 function PrintForm() {
     const [page, setPage] = useState(0);
+    const database = collection(db, "printform");
+    const [data, setData] = useState([]);
     const [fromData, setFormData] = useState({
         tests: '',
         test: '',
@@ -34,6 +37,21 @@ function PrintForm() {
         }
         return <Successful />
     }
+
+    const createData = async () => {
+        await addDoc(database,{order:fromData})
+    }
+    
+
+    useEffect(() => {
+        // const getData = async () => {
+        //     const data = await getDocs(database)
+        //     console.log(data);
+        //     setData(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+        // };
+
+        // getData();
+    }, []);
 
     const clearData = () => {
         setFormData({
@@ -75,6 +93,7 @@ function PrintForm() {
                                         if (page === FormTitles.length - 1) {
                                             alert("Form Submit")
                                             console.log(fromData)
+                                            createData()
                                             clearData()
                                         } else
                                             setPage((currpage) => currpage + 1)
@@ -86,6 +105,19 @@ function PrintForm() {
                         </div>
                     </div>
                 </CardContent>
+                {/* //getfunction */}
+                {/* <div>
+                    <div>{data.map((data) => {
+                        return (
+                            <div>
+                                {" "}
+                                <h3>: {data.tests}</h3>
+                                <h3>: {data.firstname}</h3>
+                            </div>
+                        )
+                    })}
+                    </div>
+                </div> */}
             </Card>
 
         </div>
