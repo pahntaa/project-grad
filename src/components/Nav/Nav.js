@@ -8,10 +8,10 @@ function Nav() {
     <div>
         <ul className='nav-links'>
           <li>
-          <Link to="/Home">Home</Link>
+          <Link to="/Home" style={{ textDecoration: 'none' }}>Home</Link>
           </li>
           <li>
-            <Link to="/PrintPage">Print Page</Link>
+            <Link to="/PrintPage" style={{ textDecoration: 'none' }}>Print Page</Link>
             </li>
           <li>About</li>
         </ul>
